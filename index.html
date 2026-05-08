@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library System</title>
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="container">
+  <h2>Library Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <h2>Online Library Management</h2>
+  <button onclick="logout()">Logout</button>
+
+  <!-- ADD BOOK -->
+  <h3>Add Book</h3>
+  <input type="text" id="title" placeholder="Title">
+  <input type="text" id="author" placeholder="Author">
+  <input type="text" id="category" placeholder="Category">
+  <button onclick="addBook()">Add</button>
+
+  <!-- SEARCH -->
+  <h3>Search</h3>
+  <input type="text" id="search" onkeyup="searchBook()" placeholder="Search book">
+
+  <!-- BOOK LIST -->
+  <h3>Books</h3>
+  <table border="1" width="100%">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="bookList"></tbody>
+  </table>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
