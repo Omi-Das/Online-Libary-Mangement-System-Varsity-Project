@@ -1,19 +1,497 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Issue Book</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Issue & Return Books</title>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#eef2ff;
+      min-height:100vh;
+    }
+
+    /* HEADER */
+
+    header{
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:white;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h2{
+      font-size:28px;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      margin-left:20px;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    nav a:hover{
+      opacity:0.7;
+    }
+
+    /* MAIN CONTAINER */
+
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:40px auto;
+    }
+
+    .top-section{
+      text-align:center;
+      margin-bottom:35px;
+    }
+
+    .top-section h1{
+      color:#333;
+      margin-bottom:10px;
+      font-size:42px;
+    }
+
+    .top-section p{
+      color:#666;
+      font-size:17px;
+    }
+
+    /* SEARCH */
+
+    .search-box{
+      margin:30px 0;
+      display:flex;
+      justify-content:center;
+    }
+
+    .search-box input{
+      width:100%;
+      max-width:500px;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      font-size:15px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* BOOK CARDS */
+
+    .book-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;
+    }
+
+    .book-card{
+      background:white;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
+      transition:0.3s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .book-card:hover{
+      transform:translateY(-8px);
+    }
+
+    .book-card h3{
+      color:#333;
+      margin-bottom:12px;
+    }
+
+    .book-card p{
+      color:#666;
+      margin:8px 0;
+      font-size:15px;
+    }
+
+    .status{
+      display:inline-block;
+      padding:6px 14px;
+      border-radius:30px;
+      font-size:13px;
+      margin-top:10px;
+      font-weight:600;
+    }
+
+    .available{
+      background:#dcfce7;
+      color:#15803d;
+    }
+
+    .issued{
+      background:#fee2e2;
+      color:#dc2626;
+    }
+
+    /* BUTTONS */
+
+    .btn-group{
+      margin-top:20px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      border:none;
+      padding:10px 18px;
+      border-radius:10px;
+      cursor:pointer;
+      color:white;
+      font-size:14px;
+      transition:0.3s;
+    }
+
+    .issue-btn{
+      background:#2563eb;
+    }
+
+    .return-btn{
+      background:#16a34a;
+    }
+
+    .delete-btn{
+      background:#dc2626;
+    }
+
+    button:hover{
+      opacity:0.9;
+      transform:scale(1.03);
+    }
+
+    /* FOOTER */
+
+    footer{
+      margin-top:60px;
+      background:#1f2937;
+      color:white;
+      text-align:center;
+      padding:18px;
+    }
+
+    /* TOAST */
+
+    .toast{
+      position:fixed;
+      top:20px;
+      right:20px;
+      background:#22c55e;
+      color:white;
+      padding:15px 25px;
+      border-radius:12px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+      opacity:0;
+      transform:translateX(100%);
+      transition:0.4s;
+      z-index:999;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(0);
+    }
+
+    @media(max-width:768px){
+
+      header{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .top-section h1{
+        font-size:30px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 <body>
 
-<div class="container">
+  <!-- HEADER -->
 
-  <h1>Issue & Return Books</h1>
+  <header>
 
-  <div id="bookList"></div>
+    <h2>📚 Library System</h2>
 
-</div>
+    <nav>
+      <a href="dashboard.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="issue.html">Issue</a>
+    </nav>
 
-<script src="app.js"></script>
+  </header>
+
+  <!-- MAIN -->
+
+  <div class="container">
+
+    <div class="top-section">
+
+      <h1>Issue & Return Books</h1>
+
+      <p>
+        Easily manage issued and returned books from your library.
+      </p>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+      <input 
+        type="text" 
+        id="searchInput"
+        placeholder="Search books..."
+        onkeyup="searchBooks()"
+      >
+
+    </div>
+
+    <!-- BOOK LIST -->
+
+    <div class="book-grid" id="bookList">
+
+      <!-- BOOK CARD -->
+
+      <div class="book-card">
+
+        <h3>Database Management System</h3>
+
+        <p><strong>Author:</strong> Navathe</p>
+
+        <p><strong>Category:</strong> Database</p>
+
+        <span class="status available">
+          Available
+        </span>
+
+        <div class="btn-group">
+
+          <button 
+            class="issue-btn"
+            onclick="issueBook(this)"
+          >
+            Issue
+          </button>
+
+          <button 
+            class="delete-btn"
+            onclick="deleteBook(this)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- SECOND CARD -->
+
+      <div class="book-card">
+
+        <h3>Operating System</h3>
+
+        <p><strong>Author:</strong> Galvin</p>
+
+        <p><strong>Category:</strong> System</p>
+
+        <span class="status issued">
+          Issued
+        </span>
+
+        <div class="btn-group">
+
+          <button 
+            class="return-btn"
+            onclick="returnBook(this)"
+          >
+            Return
+          </button>
+
+          <button 
+            class="delete-btn"
+            onclick="deleteBook(this)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <p>
+      © 2026 Online Library Management System | Developed by Omi Das
+    </p>
+
+  </footer>
+
+  <!-- TOAST -->
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+
+    // TOAST
+
+    function showToast(message){
+
+      const toast = document.getElementById("toast");
+
+      toast.innerText = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      },3000);
+    }
+
+    // ISSUE
+
+    function issueBook(button){
+
+      const card = button.closest(".book-card");
+
+      const status = card.querySelector(".status");
+
+      status.innerText = "Issued";
+
+      status.classList.remove("available");
+
+      status.classList.add("issued");
+
+      status.style.background = "#fee2e2";
+
+      status.style.color = "#dc2626";
+
+      button.remove();
+
+      card.querySelector(".btn-group").innerHTML += `
+      
+        <button 
+          class="return-btn"
+          onclick="returnBook(this)"
+        >
+          Return
+        </button>
+      
+      `;
+
+      showToast("Book Issued Successfully");
+
+    }
+
+    // RETURN
+
+    function returnBook(button){
+
+      const card = button.closest(".book-card");
+
+      const status = card.querySelector(".status");
+
+      status.innerText = "Available";
+
+      status.classList.remove("issued");
+
+      status.classList.add("available");
+
+      status.style.background = "#dcfce7";
+
+      status.style.color = "#15803d";
+
+      button.remove();
+
+      card.querySelector(".btn-group").innerHTML += `
+      
+        <button 
+          class="issue-btn"
+          onclick="issueBook(this)"
+        >
+          Issue
+        </button>
+      
+      `;
+
+      showToast("Book Returned Successfully");
+
+    }
+
+    // DELETE
+
+    function deleteBook(button){
+
+      const card = button.closest(".book-card");
+
+      card.remove();
+
+      showToast("Book Deleted");
+
+    }
+
+    // SEARCH
+
+    function searchBooks(){
+
+      const input = document
+      .getElementById("searchInput")
+      .value
+      .toLowerCase();
+
+      const cards = document.querySelectorAll(".book-card");
+
+      cards.forEach(card => {
+
+        const title = card.innerText.toLowerCase();
+
+        if(title.includes(input)){
+
+          card.style.display = "block";
+
+        }
+        else{
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+    }
+
+  </script>
+
 </body>
 </html>
