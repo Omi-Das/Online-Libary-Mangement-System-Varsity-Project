@@ -1,45 +1,510 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Books</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Manage Books</title>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#eef2ff;
+      min-height:100vh;
+    }
+
+    /* HEADER */
+
+    header{
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:white;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h2{
+      font-size:28px;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      margin-left:20px;
+      transition:0.3s;
+    }
+
+    nav a:hover{
+      opacity:0.7;
+    }
+
+    /* CONTAINER */
+
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:40px auto;
+    }
+
+    /* TOP */
+
+    .top-section{
+      text-align:center;
+      margin-bottom:35px;
+    }
+
+    .top-section h1{
+      font-size:42px;
+      color:#333;
+      margin-bottom:10px;
+    }
+
+    .top-section p{
+      color:#666;
+      font-size:17px;
+    }
+
+    /* FORM */
+
+    .book-form{
+      background:white;
+      padding:30px;
+      border-radius:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom:30px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:#f3f4f6;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    input:focus{
+      background:white;
+      box-shadow:0 0 0 2px #667eea;
+    }
+
+    .add-btn{
+      width:100%;
+      padding:14px;
+      margin-top:25px;
+      border:none;
+      border-radius:12px;
+      background:#667eea;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .add-btn:hover{
+      background:#5563d6;
+      transform:translateY(-2px);
+    }
+
+    /* SEARCH */
+
+    .search-box{
+      margin-bottom:25px;
+    }
+
+    /* BOOK GRID */
+
+    .book-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;
+    }
+
+    .book-card{
+      background:white;
+      border-radius:20px;
+      padding:25px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
+      transition:0.3s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .book-card:hover{
+      transform:translateY(-8px);
+    }
+
+    .book-card h3{
+      color:#333;
+      margin-bottom:15px;
+    }
+
+    .book-card p{
+      color:#666;
+      margin:8px 0;
+      font-size:15px;
+    }
+
+    .status{
+      display:inline-block;
+      padding:7px 14px;
+      border-radius:30px;
+      font-size:13px;
+      font-weight:600;
+      margin-top:10px;
+      background:#dcfce7;
+      color:#15803d;
+    }
+
+    /* BUTTONS */
+
+    .btn-group{
+      margin-top:20px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      border:none;
+      padding:10px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      color:white;
+      transition:0.3s;
+    }
+
+    .edit-btn{
+      background:#2563eb;
+    }
+
+    .delete-btn{
+      background:#dc2626;
+    }
+
+    .issue-btn{
+      background:#16a34a;
+    }
+
+    button:hover{
+      opacity:0.9;
+      transform:scale(1.04);
+    }
+
+    /* TOAST */
+
+    .toast{
+      position:fixed;
+      top:20px;
+      right:20px;
+      background:#22c55e;
+      color:white;
+      padding:15px 25px;
+      border-radius:12px;
+      opacity:0;
+      transform:translateX(100%);
+      transition:0.4s;
+      z-index:999;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(0);
+    }
+
+    /* FOOTER */
+
+    footer{
+      margin-top:60px;
+      background:#111827;
+      color:white;
+      text-align:center;
+      padding:20px;
+    }
+
+    @media(max-width:768px){
+
+      header{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .top-section h1{
+        font-size:30px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 <body>
 
-<div class="container">
+  <!-- HEADER -->
 
-  <h1>Manage Books</h1>
+  <header>
 
-  <input type="text" id="title" placeholder="Title">
+    <h2>📚 Library System</h2>
 
-  <input type="text" id="author" placeholder="Author">
+    <nav>
+      <a href="dashboard.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="issue.html">Issue</a>
+    </nav>
 
-  <input type="text" id="category" placeholder="Category">
+  </header>
 
-  <button onclick="addBook()">Add Book</button>
+  <!-- MAIN -->
 
-  <br><br>
+  <div class="container">
 
-  <input type="text" id="search" placeholder="Search Book" onkeyup="searchBook()">
+    <!-- TOP -->
 
-  <table>
+    <div class="top-section">
 
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Category</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+      <h1>Manage Books</h1>
 
-    <tbody id="bookList"></tbody>
+      <p>
+        Add, search, edit, issue and manage all library books easily.
+      </p>
 
-  </table>
+    </div>
 
-</div>
+    <!-- FORM -->
 
-<script src="app.js"></script>
+    <div class="book-form">
+
+      <div class="form-grid">
+
+        <input type="text" id="title" placeholder="Book Title">
+
+        <input type="text" id="author" placeholder="Author Name">
+
+        <input type="text" id="category" placeholder="Category">
+
+      </div>
+
+      <button class="add-btn" onclick="addBook()">
+        ➕ Add New Book
+      </button>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+      <input 
+        type="text"
+        id="search"
+        placeholder="🔍 Search books..."
+        onkeyup="searchBook()"
+      >
+
+    </div>
+
+    <!-- BOOK LIST -->
+
+    <div class="book-grid" id="bookList">
+
+      <!-- SAMPLE CARD -->
+
+      <div class="book-card">
+
+        <h3>Database Management System</h3>
+
+        <p><strong>Author:</strong> Navathe</p>
+
+        <p><strong>Category:</strong> Database</p>
+
+        <span class="status">
+          Available
+        </span>
+
+        <div class="btn-group">
+
+          <button class="issue-btn">
+            Issue
+          </button>
+
+          <button class="edit-btn">
+            Edit
+          </button>
+
+          <button 
+            class="delete-btn"
+            onclick="deleteCard(this)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <p>
+      © 2026 Online Library Management System | Developed by Omi Das
+    </p>
+
+  </footer>
+
+  <!-- TOAST -->
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+
+    // TOAST
+
+    function showToast(message){
+
+      const toast = document.getElementById("toast");
+
+      toast.innerText = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      },3000);
+
+    }
+
+    // ADD BOOK 
+
+    function addBook(){
+
+      const title = document.getElementById("title").value;
+
+      const author = document.getElementById("author").value;
+
+      const category = document.getElementById("category").value;
+
+      if(title === "" || author === "" || category === ""){
+
+        showToast("Please fill all fields");
+
+        return;
+      }
+
+      const bookList = document.getElementById("bookList");
+
+      bookList.innerHTML += `
+      
+        <div class="book-card">
+
+          <h3>${title}</h3>
+
+          <p><strong>Author:</strong> ${author}</p>
+
+          <p><strong>Category:</strong> ${category}</p>
+
+          <span class="status">
+            Available
+          </span>
+
+          <div class="btn-group">
+
+            <button class="issue-btn">
+              Issue
+            </button>
+
+            <button class="edit-btn">
+              Edit
+            </button>
+
+            <button 
+              class="delete-btn"
+              onclick="deleteCard(this)"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+      
+      `;
+
+      showToast("Book Added Successfully");
+
+      document.getElementById("title").value = "";
+
+      document.getElementById("author").value = "";
+
+      document.getElementById("category").value = "";
+
+    }
+
+    // DELETE
+
+    function deleteCard(button){
+
+      button.closest(".book-card").remove();
+
+      showToast("Book Deleted");
+
+    }
+
+    // SEARCH
+
+    function searchBook(){
+
+      const input = document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+      const cards = document.querySelectorAll(".book-card");
+
+      cards.forEach(card => {
+
+        const text = card.innerText.toLowerCase();
+
+        if(text.includes(input)){
+
+          card.style.display = "block";
+
+        }
+        else{
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+    }
+
+  </script>
+
 </body>
 </html>
