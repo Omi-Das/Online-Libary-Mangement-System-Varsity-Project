@@ -11,7 +11,7 @@ function login(){
     window.location.href = "dashboard.html";
   }
   else{
-    alert("Invalid Login");
+    alert("Invalid Login shit!!!");
   }
 }
 
